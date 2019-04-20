@@ -12,11 +12,18 @@ app.layout = html.Div([
     dcc.Dropdown(
         id='my-dropdown',
         options=[
-            {'label': 'Coke', 'value': 'COKE'},
+            {'label': 'NIO', 'value': 'NIO'},
             {'label': 'Tesla', 'value': 'TSLA'},
-            {'label': 'Apple', 'value': 'AAPL'}
+            {'label': 'Apple', 'value': 'AAPL'},
+            {'label': 'Deutsche X-trackers Harvest CSI300 CHN A', 'value': 'ASHR'},
+            {'label': 'Harvest CSI 500 China-A Shares Small Cap ETF', 'value': 'ASHS'},
+            {'label': '摩根史坦利中国A股指数基金', 'value': 'CAF'},
+            {'label': 'ETF-iShares FTSE', 'value': 'FXI'},
+            {'label': 'Direxion Daily FTSE China Bull 3X ETF', 'value': 'YINN'},
+            {'label': '中证小盘股做多ETF', 'value': 'CNXT'},
+            {'label': '沪深300', 'value': 'CHAU'},
         ],
-        value='COKE'
+        value='NIO'
     ),
     dcc.Graph(id='my-graph')
 ], style={'width': '500'})
@@ -25,8 +32,8 @@ app.layout = html.Div([
 def update_graph(selected_dropdown_value):
     df = web.DataReader(
         selected_dropdown_value,
-        'google',
-        dt(2017, 1, 1),
+        'yahoo',
+        dt(2018, 1, 1),
         dt.now()
     )
     return {
