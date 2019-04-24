@@ -6,9 +6,11 @@ import dash_html_components as html
 from pandas_datareader import data as web
 from datetime import datetime as dt
 
-app = dash.Dash('Hello World')
+app = dash.Dash('HS Dasher Sample')
 
 app.layout = html.Div([
+    html.H1(children='HS Dasher Sample'),
+
     dcc.Dropdown(
         id='my-dropdown',
         options=[
@@ -25,7 +27,15 @@ app.layout = html.Div([
         ],
         value='NIO'
     ),
-    dcc.Graph(id='my-graph')
+    
+    dcc.Graph(id='my-graph'),
+    
+    dcc.Slider(
+        min=0,
+        max=2,
+        marks={i: 'Label {}'.format(i) for i in range(3)},
+        value=1,
+    )
 ], style={'width': '500'})
 
 @app.callback(Output('my-graph', 'figure'), [Input('my-dropdown', 'value')])
