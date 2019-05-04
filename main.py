@@ -3,8 +3,11 @@ from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
 
+import panda as pd
 from pandas_datareader import data as web
 from datetime import datetime as dt
+
+#Load vix data
 
 app = dash.Dash('HS Options Vix')
 
@@ -28,11 +31,11 @@ app.layout = html.Div([
     #     value='NIO'
     # ),
     
-    dcc.Graph(id='my-graph'),
+    dcc.Graph(id='options_vix_graph'),
 
     html.Div([
         dcc.Slider(
-        id='my-slider',
+        id='time_slider',
         min=0,
         max=5,
         marks={
@@ -54,9 +57,9 @@ app.layout = html.Div([
     })
 
 @app.callback(
-    Output('my-graph', 'figure'), 
-    [Input('my-dropdown', 'value'),
-    Input('my-slider','value')])
+    Output('options_vix_graph', 'figure'), 
+    [Input('time_slider','value')] 
+    )
 def update_graph(selected_dropdown_value, selected_slider_value):
     df = web.DataReader(
         selected_dropdown_value,
