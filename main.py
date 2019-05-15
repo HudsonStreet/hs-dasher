@@ -20,6 +20,8 @@ df['Day'] = df['date_time'].dt.day
 df['Hour'] = df['date_time'].dt.hour
 df['Minute'] = df['date_time'].dt.minute
 
+# df["vix_final"] = df["vix_value"].to_numeric
+
 print(df['date_time'])
 print(df['vix_value'])
 print(df['Hour'])
@@ -34,6 +36,20 @@ app.layout = html.Div([
     ], style={
         'textAlign': "center"}),
 
+    dcc.Dropdown(
+        id='vix_dropdown',
+        options=[
+            {'label': 'Options Vix', 'value': 'options_vix'},
+        ],
+        multi=True,
+        value=['options_vix'],
+        style={
+            "display": "block",
+            "margin-left": "auto",
+            "margin-right": "auto",
+            "width": "60%",
+        }
+    ),
     dcc.Graph(id='options_vix_graph'),
     # dcc.Interval(id='refresh', Interval=100)
 
@@ -56,43 +72,43 @@ app.layout = html.Div([
 ], className="container")
 
 @app.callback(
-    Output('options_vix_graph', 'figure')
+    Output('options_vix_graph', 'figure'),
     #events=[Event('refresh', 'interval')]
-    # [Input('time_slider','value')] 
+    [Input('vix_dropdown','value')] 
 )
-def update_graph():
-    trace = []
+def update_graph(selected_dropdown_value):
+    options_vix_trance = []
+    for vix in selected_dropdown_value:
+        options_vix_trance.append(graob.Scatter(
+            x = df["Month"],
+            y = df["vix_value"],
+            mode='lines',
+            opacity=0.7,
+            name=f'VIX {vix}',
+            textposition='bottom center',
+        ))
 
-    trace.append(graob.Scatter(
-        x = df["Month"],
-        y = df["vix_value"],
-        mode='lines',
-        opacity=0.7,
-        name=f'VIX',
-        textposition='bottom center',
-    ))
-
-    # traces = [trace1]
-    # data = [val for sublist in traces for val in sublist]
+    traces = [options_vix_trance]
+    data = [val for sublist in traces for val in sublist]
     
-    return {
-        'data': trace,
+    figure =  {
+        'data': data,
         'layout': graob.Layout(
             colorway=["#5E0DAC", '#FF4F00', '#375CB1', '#FF7400', '#FFF400', '#FF0056'],
             height=600,
-            title=f"Options vix",
+            title=f"Vix Line Charts",
             xaxis={"title":"Date",
-            #     'rangeselector': {'buttons': list([
-            #     {'count': 1, 'label': '1M', 'step': 'month', 'stepmode': 'backward'},
-            #     {'count': 6, 'label': '6M', 'step': 'month', 'stepmode': 'backward'},
-            #     {'step': 'all'}
-            # ])}, 'rangeslider': {'visible': True}, 'type': 'date'},
-            },
+                'rangeselector': {'buttons': list([
+                {'count': 1, 'label': '1M', 'step': 'month', 'stepmode': 'backward'},
+                {'count': 6, 'label': '6M', 'step': 'month', 'stepmode': 'backward'},
+                {'step': 'all'}
+            ])}, 'rangeslider': {'visible': True}, 'type': 'date'},
             yaxis={
-                "title":"VIX",
+                "title":"VIX (value)",
             }
         )
     }
+    return figure
 
 # app.css.append_css({'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
 
