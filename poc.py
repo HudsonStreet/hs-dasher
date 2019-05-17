@@ -29,17 +29,35 @@ app.layout = html.Div([
     ),
     
     dcc.Graph(id='my-graph'),
-    
-    dcc.Slider(
+
+    html.Div([
+        dcc.Slider(
+        id='my-slider',
         min=0,
-        max=2,
-        marks={i: 'Label {}'.format(i) for i in range(3)},
+        max=5,
+        marks={
+            0: '1 day', 
+            1: '5 days',
+            2: '1 month',
+            3: '3 months',
+            4: '6 months',
+            5: 'YTD'
+        },
         value=1,
     )
-], style={'width': '500'})
+    ])
+    
+], style={
+        'width': 'auto',
+        'borderWidth': '1px',
+        'borderStyle': 'dashed',
+    })
 
-@app.callback(Output('my-graph', 'figure'), [Input('my-dropdown', 'value')])
-def update_graph(selected_dropdown_value):
+@app.callback(
+    Output('my-graph', 'figure'), 
+    [Input('my-dropdown', 'value'),
+    Input('my-slider','value')])
+def update_graph(selected_dropdown_value, selected_slider_value):
     df = web.DataReader(
         selected_dropdown_value,
         'yahoo',
@@ -56,5 +74,5 @@ def update_graph(selected_dropdown_value):
 
 app.css.append_css({'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
 
-if __name__ == '__main__':
-    app.run_server()
+# if __name__ == '__main__':
+#     app.run_server()
