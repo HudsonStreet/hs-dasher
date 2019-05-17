@@ -1,3 +1,4 @@
+import re
 import dash
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
@@ -7,26 +8,22 @@ import pandas as pd
 from datetime import datetime as dt
 import plotly.graph_objs as graob
 
-##Load vix data
+##Load and process vix data
 headers = ['date_time', 'vix_value']
 dtypes = {'date_time':'str', 'vix_value': 'str'}
 parse_dates = ['date_time']
-df = pd.read_csv("../VIX_Calculator/vix_w_datetime.csv", header=None, names=headers, dtype=dtypes, parse_dates=parse_dates)
+df = pd.read_csv("../vix_w_datatime_dasher_test.csv", header=None, names=headers, dtype=dtypes, parse_dates=parse_dates)
 df = df.dropna()
 df['date_time'] = pd.to_datetime(df.date_time, infer_datetime_format=True)
-df['Month'] = df['date_time'].dt.month
-df['Day'] = df['date_time'].dt.day
-#df['TimeOfDate'] = df['date_time'].dt.time()
-df['Hour'] = df['date_time'].dt.hour
-df['Minute'] = df['date_time'].dt.minute
+df['vix_value'] = df['vix_value'].str.replace('[','').str.replace(']','')
 
-# df["vix_final"] = df["vix_value"].to_numeric
-
-print(df['date_time'])
-print(df['vix_value'])
-print(df['Hour'])
-print(df['Minute'])
-#print(df['TimeOfDate'])
+print(df)
+# df['Month'] = df['date_time'].dt.month
+# df['Day'] = df['date_time'].dt.day
+# df['TimeOfDate'] = df['date_time'].dt.time()
+# df['Hour'] = df['date_time'].dt.hour
+# df['Minute'] = df['date_time'].dt.minute
+# df['Second'] = df['date_time'].dt.second
 
 app = dash.Dash(__name__)
 
@@ -80,7 +77,7 @@ def update_graph(selected_dropdown_value):
     options_vix_trance = []
     for vix in selected_dropdown_value:
         options_vix_trance.append(graob.Scatter(
-            x = df["Month"],
+            x = df["date_time"],
             y = df["vix_value"],
             mode='lines',
             opacity=0.7,
