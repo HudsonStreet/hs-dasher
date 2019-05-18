@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve hs-dasher
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/uwsgi --ini /root/hs-dasher/dasher.ini
+WorkingDirectory=/root/
+Restart=on-failure
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
