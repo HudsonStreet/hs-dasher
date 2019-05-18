@@ -12,7 +12,7 @@ import plotly.graph_objs as graob
 headers = ['date_time', 'vix_value']
 dtypes = {'date_time':'str', 'vix_value': 'str'}
 parse_dates = ['date_time']
-df = pd.read_csv("../vix_w_datatime_dasher_test.csv", header=None, names=headers, dtype=dtypes, parse_dates=parse_dates)
+df = pd.read_csv("../vix_w_datetime.csv", header=None, names=headers, dtype=dtypes, parse_dates=parse_dates)
 df = df.dropna()
 df['date_time'] = pd.to_datetime(df.date_time, infer_datetime_format=True)
 df['vix_value'] = df['vix_value'].str.replace('[','').str.replace(']','')
@@ -26,6 +26,7 @@ print(df)
 # df['Second'] = df['date_time'].dt.second
 
 app = dash.Dash(__name__)
+server = app.server
 
 app.layout = html.Div([
    html.Div([
@@ -110,7 +111,7 @@ def update_graph(selected_dropdown_value):
 # app.css.append_css({'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'})
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, host='0.0.0.0')
     
     #For testing
     # headers = ['date_time', 'vix_value']
