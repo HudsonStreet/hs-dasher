@@ -67,7 +67,7 @@ six==1.12.0
 ssh-import-id==5.7
 systemd-python==234
 traitlets==4.3.2
-Twisted==18.9.0
+Twisted==19.2.1
 ubuntu-advantage-tools==19.2
 ufw==0.36
 unattended-upgrades==0.1
