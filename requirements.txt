@@ -39,7 +39,7 @@ language-selector==0.1
 MarkupSafe==1.1.0
 nbformat==4.4.0
 netifaces==0.10.4
-numpy==1.16.3
+numpy==1.22.0
 oauthlib==2.1.0
 pandas==0.24.2
 plotly==3.9.0
